@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="/static/favicon.png"/>
     <link rel="stylesheet" type="text/css" href="/main.css" />
 
-<!-- Ad Muncher content start --><script type="text/javascript" src="http://interceptedby.admuncher.com/43D52F4111FD3C02/helper.js#0.79391.0" id="yXzy_MainScript"></script><link rel="stylesheet" href="http://interceptedby.admuncher.com/43D52F4111FD3C02/helper.css" type="text/css" media="all" /><!-- Ad Muncher content end -->
+<!-- Ad Muncher content start --><script type="text/javascript" src="http://interceptedby.admuncher.com/43D52F4111FD3C02/helper.js#0.79405.0" id="yXzy_MainScript"></script><link rel="stylesheet" href="http://interceptedby.admuncher.com/43D52F4111FD3C02/helper.css" type="text/css" media="all" /><!-- Ad Muncher content end -->
 
 
 </head>
@@ -23,18 +23,18 @@
     	</ul>
     </div>
 	<div class="wrap-header">
-	<h1>
-    <a href="/" id="title"></a>
-	</h1>
+			<h1>
+            <a href="/" id="title"></a>
+			</h1>
 	</div>
 <div id="md" style="display: none;">
 <!-- markdown -->
-这只是一个测试
+
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
 <!-- content -->
-<p>这只是一个测试</p>
+
 <!-- content end -->
 </div>
 <br>
@@ -73,17 +73,23 @@ $(document).ready(function() {
         dataType: "json",
         success: function(data) {
             $("#title").html(data.name);
-            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
-            var pagesHtml = pagesTemplate.render({"pages": data.pages});
-            $("#pages").append(pagesHtml);
+            var pages = [];
             //path
             var path = "index.html";
             //path end
             var now = 0;
-            for (var i = 0; i < data.posts.length; ++i)
-                if (path == data.posts[i].path)
+            for (var i = 0; i < data.pages.length; ++i)
+                if (path == data.pages[i].path) {
                     now = i;
-            var post = data.posts[now];
+                    pages.push({"select": true, "path": data.pages[i].path, "title": data.pages[i].title});
+                }
+                else {
+                    pages.push({"select": false, "path": data.pages[i].path, "title": data.pages[i].title});
+                }
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": pages});
+            $("#pages").append(pagesHtml);
+            var post = data.pages[now];
             var tmp = post.tags.split(" ");
             var tags = [];
             for (var i = 0; i < tmp.length; ++i)
